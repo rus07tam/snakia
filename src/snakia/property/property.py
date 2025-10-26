@@ -5,7 +5,12 @@ from snakia.types import empty
 
 class Property[T]:
     """
-    A property that can be set, get, and deleted."""
+    A property that can be set, get, and deleted.
+    """
+
+    __slots__ = "__fget", "__fset", "__fdel", "__name"
+
+    __name: str
 
     def __init__(
         self,
@@ -16,6 +21,9 @@ class Property[T]:
         self.__fget = fget
         self.__fset = fset
         self.__fdel = fdel
+
+    def __set_name__(self, owner: type, name: str) -> None:
+        self.__name = name
 
     def __get__(self, instance: Any, owner: type | None = None, /) -> T:
         return self.__fget(instance)
@@ -40,3 +48,7 @@ class Property[T]:
         """Descriptor deleter."""
         self.__fdel = fdel
         return self
+
+    @property
+    def name(self) -> str:
+        return self.__name
