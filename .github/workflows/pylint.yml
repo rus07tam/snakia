@@ -1,0 +1,33 @@
+name: Pylint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          activate-environment: "true"
+          enable-cache: "auto"
+          cache-dependency-glob: |
+            **/pyproject.toml
+            **/uv.lock
+          restore-cache: "true"
+          save-cache: "true"
+      - name: Install project dependencies
+        run: |
+          uv sync --all-groups
+      - name: Install pylint
+        run: |
+          uv pip install pylint
+      - name: Lint code with pylint
+        run: |
+          uv run pylint src/snakia

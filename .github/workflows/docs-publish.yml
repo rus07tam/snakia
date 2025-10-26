@@ -1,0 +1,50 @@
+name: Documentation publish
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          activate-environment: "false"
+          enable-cache: "auto"
+          cache-dependency-glob: |
+            **/pyproject.toml
+            **/uv.lock
+          restore-cache: "true"
+          save-cache: "true"
+      - name: Install dependencies
+        run: uv sync --all-groups
+      - name: Install Sphinx
+        run: uv pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+      - name: Build documentation
+        run: uv run sphinx-build -b html docs/source docs/_build/html
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
