@@ -2,7 +2,7 @@
 
 # 🐍 Snakia Framework
 
-![Code Quality](https://img.shields.io/codacy/grade/s)
+![Code Quality](https://img.shields.io/codacy/grade/508e02449dd145e7a93c7ba08ac756a4?logo=codacy)
 ![Code Size](https://img.shields.io/github/languages/code-size/ruject/snakia)
 ![License](https://img.shields.io/github/license/ruject/snakia)
 ![Open Issues](https://img.shields.io/github/issues-raw/ruject/snakia)
