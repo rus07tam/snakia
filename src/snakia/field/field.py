@@ -36,14 +36,24 @@ class Field[T: Any](ABC, PrivProperty[T]):
     @classmethod
     def custom[R](
         cls: type[Field[Any]],
-        serialize: Callable[[R], str],
-        deserialize: Callable[[str], R],
+        serialize: Callable[[Field[R], R], bytes],
+        deserialize: Callable[[Field[R], bytes], R],
     ) -> type[Field[R]]:
         return inherit(
             cls, {"serialize": serialize, "deserialize": deserialize}
         )
 
+    @final
+    @staticmethod
+    def get_fields(class_: type[Any] | Any, /) -> dict[str, Field[Any]]:
+        if not isinstance(class_, type):
+            class_ = class_.__class__
+        return {
+            k: v for k, v in class_.__dict__.items() if isinstance(v, Field)
+        }
+
     if TYPE_CHECKING:
 
+        @final
         @classmethod
         def type(cls) -> type[T]: ...
