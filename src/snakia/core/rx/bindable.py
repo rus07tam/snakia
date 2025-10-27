@@ -19,7 +19,7 @@ class Bindable[T: Any](BaseBindable[T]):
 
     def set(self, value: T) -> None:
         """Set the value."""
-        e = ValueChanged(self.__value, value)
+        e = ValueChanged(self.value, value)
         self.set_silent(value)
         for subscriber in self.__subscribers:
             subscriber(e)

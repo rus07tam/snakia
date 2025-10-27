@@ -4,6 +4,7 @@ from .bindable import Bindable
 from .chain import chain
 from .combine import combine
 from .concat import concat
+from .cond import cond
 from .const import const
 from .filter import filter  # noqa: W0622 # pylint: disable=W0622
 from .map import map  # noqa: W0622 # pylint: disable=W0622
@@ -18,6 +19,7 @@ __all__ = [
     "chain",
     "combine",
     "concat",
+    "cond",
     "const",
     "filter",
     "map",

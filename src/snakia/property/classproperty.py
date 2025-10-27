@@ -48,7 +48,7 @@ class ClassProperty[T]:
 
 
 def classproperty[T](
-    fget: Callable[[Any], T] = empty.func,
+    fget: Callable[[Any], T],
     fset: Callable[[Any, T], None] = empty.func,
     fdel: Callable[[Any], None] = empty.func,
 ) -> ClassProperty[T]:

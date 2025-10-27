@@ -13,5 +13,6 @@ wheels/
 .direnv
 .mypy_cache
 .python-version
+.pytest_cache
 .vscode
 _autosummary

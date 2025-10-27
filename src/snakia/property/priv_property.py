@@ -15,7 +15,7 @@ class PrivProperty[T]:
     def __get__(self, instance: Any, owner: type | None = None, /) -> T:
         if self.__default_value:
             return getattr(instance, self.__name, self.__default_value)
-        return getattr(instance, self.__name)
+        return getattr(instance, self.__name)  # type: ignore
 
     def __set__(self, instance: Any, value: T, /) -> None:
         setattr(instance, self.__name, value)

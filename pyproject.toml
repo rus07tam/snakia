@@ -1,6 +1,6 @@
 [project]
 name = "snakia"
-version = "0.4.0"
+version = "0.4.1"
 description = "Modern python framework"
 readme = "README.md"
 authors = [
@@ -38,3 +38,4 @@ disable = ["C0114", "C0115", "C0116", "R0801"]
 max-args = 8
 max-positional-arguments = 7
 min-public-methods = 1
+fail-on = "error"

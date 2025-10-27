@@ -13,10 +13,6 @@ class AsyncBindable[T: Any](BaseBindable[T]):
         self.__subscribers: list[BindableSubscriber[T, Awaitable[Any]]] = []
 
     @property
-    def value(self) -> T:
-        return self.__value
-
-    @property
     def subscribers(
         self,
     ) -> tuple[BindableSubscriber[T, Awaitable[Any]], ...]:
@@ -25,8 +21,8 @@ class AsyncBindable[T: Any](BaseBindable[T]):
 
     async def set(self, value: T) -> None:
         """Set the value."""
-        e = ValueChanged(self.__value, value)
-        self.__value = value
+        e = ValueChanged(self.value, value)
+        self.set_silent(value)
         for subscriber in self.__subscribers:
             await subscriber(e)
 
@@ -58,7 +54,7 @@ class AsyncBindable[T: Any](BaseBindable[T]):
 
             async def _run() -> None:
                 await subscriber(
-                    ValueChanged(self.__default_value, self.__value)
+                    ValueChanged(self.__default_value, self.value)
                 )
 
             return _run()
@@ -96,7 +92,7 @@ class AsyncBindable[T: Any](BaseBindable[T]):
 
                 async def _run() -> None:
                     await subscriber(
-                        ValueChanged(self.__default_value, self.__value)
+                        ValueChanged(self.__default_value, self.value)
                     )
 
                 return _run()
