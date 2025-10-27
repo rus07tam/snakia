@@ -1,27 +1,32 @@
 from typing import Any, Callable
 
+from snakia.utils import throw
 
-class Readonly[T]:
+from .property import Property
+
+
+class Readonly[T](Property[T]):
     """
     Readonly property.
     """
 
-    __slots__ = ("__fget",)
-
     def __init__(
         self,
         fget: Callable[[Any], T],
+        *,
+        strict: bool = False,
     ) -> None:
-        self.__fget = fget
+        super().__init__(
+            fget=fget,
+            fset=(
+                (lambda *_: throw(TypeError("Cannot set readonly property")))
+                if strict
+                else lambda *_: None
+            ),
+        )
 
-    def __get__(self, instance: Any, owner: type | None = None, /) -> T:
-        return self.__fget(instance)
 
-    def __set__(self, instance: Any, value: T, /) -> None:
-        pass
-
-
-def readonly[T](value: T) -> Readonly[T]:
+def readonly[T](value: T, *, strict: bool = False) -> Readonly[T]:
     """Create a readonly property with the given value.
 
     Args:
@@ -30,4 +35,4 @@ def readonly[T](value: T) -> Readonly[T]:
     Returns:
         Readonly[T]: The readonly property.
     """
-    return Readonly(lambda _: value)
+    return Readonly(lambda _: value, strict=strict)
