@@ -6,23 +6,20 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    {
-      nixpkgs,
-      flake-utils,
-      ...
-    }:
+  outputs = {
+    nixpkgs,
+    flake-utils,
+    ...
+  }:
     flake-utils.lib.eachDefaultSystem (
-      system:
-      let
+      system: let
         pkgs = import nixpkgs {
           inherit system;
         };
-      in
-      {
+      in {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            python312
+            python310
           ];
 
           buildInputs = with pkgs; [
@@ -31,7 +28,7 @@
             uv
             isort
             mypy
-            python312Packages.pylint
+            pylint
           ];
         };
       }
