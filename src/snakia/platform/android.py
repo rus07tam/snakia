@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from ctypes import CDLL, Array, c_char, c_char_p, create_string_buffer
-from typing import Any, Final, Literal, cast, overload
+from typing import Any, Final, Literal, TypeVar, cast, overload
 
 from .layer import PlatformLayer
 from .os import PlatformOS
+
+T = TypeVar("T")
 
 
 class AndroidLayer(PlatformLayer[Literal[PlatformOS.ANDROID]]):
@@ -16,7 +18,7 @@ class AndroidLayer(PlatformLayer[Literal[PlatformOS.ANDROID]]):
     def get_prop(self, name: str) -> str | None: ...
 
     @overload
-    def get_prop[T](self, name: str, default: T) -> str | T: ...
+    def get_prop(self, name: str, default: T) -> str | T: ...
 
     def get_prop(self, name: str, default: Any = None) -> Any:
         buffer = create_string_buffer(self.PROP_VALUE_MAX)

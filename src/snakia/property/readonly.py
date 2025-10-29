@@ -1,11 +1,13 @@
-from typing import Any, Callable
+from typing import Any, Callable, Generic, TypeVar
 
 from snakia.utils import throw
 
 from .property import Property
 
+T = TypeVar("T")
 
-class Readonly[T](Property[T]):
+
+class Readonly(Property[T], Generic[T]):
     """
     Readonly property.
     """
@@ -26,7 +28,7 @@ class Readonly[T](Property[T]):
         )
 
 
-def readonly[T](value: T, *, strict: bool = False) -> Readonly[T]:
+def readonly(value: T, *, strict: bool = False) -> Readonly[T]:
     """Create a readonly property with the given value.
 
     Args:

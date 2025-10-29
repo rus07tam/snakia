@@ -1,20 +1,26 @@
-from typing import Any, Callable, overload
+from typing import Any, Callable, ParamSpec, TypeVar, overload
+
+P = ParamSpec("P")
+
+A = TypeVar("A")
+B = TypeVar("B")
+C = TypeVar("C")
+D = TypeVar("D")
+E = TypeVar("E")
 
 
 @overload
-def chain[**P, A](func1: Callable[P, A], /) -> Callable[P, A]: ...
+def chain(func1: Callable[P, A], /) -> Callable[P, A]: ...
 
 
 @overload
-def chain[**P, A, B](
-    func1: Callable[P, A], func2: Callable[[A], B], /
-) -> Callable[P, B]: ...
+def chain(func1: Callable[P, A], func2: Callable[[A], B], /) -> Callable[P, B]: ...
 @overload
-def chain[**P, A, B, C](
+def chain(
     func1: Callable[P, A], func2: Callable[[A], B], func3: Callable[[B], C], /
 ) -> Callable[P, C]: ...
 @overload
-def chain[**P, A, B, C, D](
+def chain(
     func1: Callable[P, A],
     func2: Callable[[A], B],
     func3: Callable[[B], C],
@@ -24,7 +30,7 @@ def chain[**P, A, B, C, D](
 
 
 @overload
-def chain[**P, A, B, C, D, E](
+def chain(
     func1: Callable[P, A],
     func2: Callable[[A], B],
     func3: Callable[[B], C],
@@ -35,14 +41,12 @@ def chain[**P, A, B, C, D, E](
 
 
 @overload
-def chain[**P](
+def chain(
     func1: Callable[P, Any], /, *funcs: Callable[[Any], Any]
 ) -> Callable[P, Any]: ...
 
 
-def chain[**P](
-    func1: Callable[P, Any], /, *funcs: Callable[[Any], Any]
-) -> Callable[P, Any]:
+def chain(func1: Callable[P, Any], /, *funcs: Callable[[Any], Any]) -> Callable[P, Any]:
 
     def inner(*args: P.args, **kwargs: P.kwargs) -> Any:
         v = func1(*args, **kwargs)

@@ -1,9 +1,11 @@
-from typing import Any, Awaitable, Callable, Literal, overload
+from typing import Any, Awaitable, Callable, Generic, Literal, TypeVar, overload
 
 from .base_bindable import BaseBindable, BindableSubscriber, ValueChanged
 
+T = TypeVar("T")
 
-class AsyncBindable[T: Any](BaseBindable[T]):
+
+class AsyncBindable(BaseBindable[T], Generic[T]):
     """
     An asynchronous bindable.
     """
@@ -53,25 +55,19 @@ class AsyncBindable[T: Any](BaseBindable[T]):
         if run_now:
 
             async def _run() -> None:
-                await subscriber(
-                    ValueChanged(self.__default_value, self.value)
-                )
+                await subscriber(ValueChanged(self.__default_value, self.value))
 
             return _run()
         return None
 
-    def unsubscribe(
-        self, subscriber: BindableSubscriber[T, Awaitable[Any]]
-    ) -> None:
+    def unsubscribe(self, subscriber: BindableSubscriber[T, Awaitable[Any]]) -> None:
         """Unsubscribe from an value."""
         self.__subscribers.remove(subscriber)
 
     @overload
     def on(
         self, run_now: Literal[True]
-    ) -> Callable[
-        [BindableSubscriber[T, Awaitable[Any]]], Awaitable[None]
-    ]: ...
+    ) -> Callable[[BindableSubscriber[T, Awaitable[Any]]], Awaitable[None]]: ...
 
     @overload
     def on(
@@ -91,9 +87,7 @@ class AsyncBindable[T: Any](BaseBindable[T]):
             if run_now:
 
                 async def _run() -> None:
-                    await subscriber(
-                        ValueChanged(self.__default_value, self.value)
-                    )
+                    await subscriber(ValueChanged(self.__default_value, self.value))
 
                 return _run()
             return None

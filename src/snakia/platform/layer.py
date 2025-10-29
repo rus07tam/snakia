@@ -1,11 +1,15 @@
 from __future__ import annotations
 
-from typing import ClassVar, Self, final, overload
+from typing import ClassVar, Generic, TypeVar, final, overload
+
+from typing_extensions import Self
 
 from .os import PlatformOS
 
+T = TypeVar("T", bound=PlatformOS)
 
-class PlatformLayer[T: PlatformOS]:
+
+class PlatformLayer(Generic[T]):
     target: ClassVar[PlatformOS] = PlatformOS.UNKNOWN
 
     @final

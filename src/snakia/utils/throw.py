@@ -1,10 +1,14 @@
-from typing import Any, NoReturn, overload
+from typing import Any, NoReturn, TypeVar, overload
+
+from exceptiongroup import ExceptionGroup
 
 from snakia.types.unset import Unset
 
+T = TypeVar("T", bound=Exception)
+
 
 @overload
-def throw[T: Exception](
+def throw(
     *exceptions: T,  # pyright: ignore[reportInvalidTypeVarUse]
     from_: Unset | BaseException = Unset(),
 ) -> NoReturn: ...

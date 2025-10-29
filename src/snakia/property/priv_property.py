@@ -1,7 +1,9 @@
-from typing import Any
+from typing import Any, Generic, TypeVar
+
+T = TypeVar("T")
 
 
-class PrivProperty[T]:
+class PrivProperty(Generic[T]):
     __slots__ = "__name", "__default_value"
 
     __name: str

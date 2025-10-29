@@ -1,4 +1,4 @@
-from typing import Final, override
+from typing import Final
 
 from .field import Field
 
@@ -8,10 +8,8 @@ class StrField(Field[str]):
         super().__init__(default_value)
         self.encoding: Final = encoding
 
-    @override
     def serialize(self, value: str, /) -> bytes:
         return value.encode(self.encoding)
 
-    @override
     def deserialize(self, serialized: bytes, /) -> str:
         return serialized.decode(self.encoding)

@@ -1,9 +1,11 @@
-from typing import Any, Callable
+from typing import Any, Callable, Generic, TypeVar
 
 from .base_bindable import BaseBindable, BindableSubscriber, ValueChanged
 
+T = TypeVar("T")
 
-class Bindable[T: Any](BaseBindable[T]):
+
+class Bindable(BaseBindable[T], Generic[T]):
     """
     A bindable value.
     """
@@ -36,9 +38,7 @@ class Bindable[T: Any](BaseBindable[T]):
         """Unsubscribe from an value."""
         self.__subscribers.remove(subscriber)
 
-    def on(
-        self, run_now: bool = False
-    ) -> Callable[[BindableSubscriber[T, Any]], None]:
+    def on(self, run_now: bool = False) -> Callable[[BindableSubscriber[T, Any]], None]:
         """Decorator to subscribe to an value."""
 
         def wrapper(subscriber: BindableSubscriber[T, Any]) -> None:

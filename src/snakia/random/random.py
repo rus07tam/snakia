@@ -1,9 +1,13 @@
 import builtins
 from abc import ABC, abstractmethod
-from typing import Any, MutableSequence, Sequence, final
+from typing import Any, Generic, MutableSequence, Sequence, TypeVar, final
+
+S = TypeVar("S")
+T = TypeVar("T")
+M = TypeVar("M", bound=MutableSequence[Any])
 
 
-class Random[S](ABC):
+class Random(ABC, Generic[S]):
     """
     A random number generator.
     """
@@ -45,12 +49,12 @@ class Random[S](ABC):
         return self.bits(32) / (1 << 32)
 
     @final
-    def choice[T](self, seq: Sequence[T]) -> T:
+    def choice(self, seq: Sequence[T]) -> T:
         """Return a random element from a non-empty sequence."""
         return seq[self.below(len(seq))]
 
     @final
-    def shuffle[T: MutableSequence[Any]](self, seq: T) -> T:
+    def shuffle(self, seq: M) -> M:
         """Shuffle a sequence in place."""
         for i in range(len(seq) - 1, 0, -1):
             j = self.below(i + 1)

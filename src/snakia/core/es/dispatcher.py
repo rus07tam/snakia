@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import queue
 from collections import defaultdict
-from typing import Callable, Final
+from typing import Callable, Final, TypeVar
 
 from snakia.utils import nolock
 
@@ -10,6 +10,8 @@ from .event import Event
 from .filter import Filter
 from .handler import Handler
 from .subscriber import Subscriber
+
+T = TypeVar("T", bound=Event)
 
 
 class Dispatcher:
@@ -21,9 +23,9 @@ class Dispatcher:
 
     def __init__(self) -> None:
         self.__queue: Final = queue.Queue[Event]()
-        self.__subscribers: Final[
-            dict[type[Event], list[Subscriber[Event]]]
-        ] = defaultdict(list)
+        self.__subscribers: Final[dict[type[Event], list[Subscriber[Event]]]] = (
+            defaultdict(list)
+        )
         self.__running = False
 
     @property
@@ -31,15 +33,11 @@ class Dispatcher:
         """Returns True if the dispatcher is running."""
         return self.__running
 
-    def subscribe[T: Event](
-        self, event_type: type[T], subscriber: Subscriber[T]
-    ) -> None:
+    def subscribe(self, event_type: type[T], subscriber: Subscriber[T]) -> None:
         """Subscribe to an event type."""
         self.__subscribers[event_type].append(subscriber)  # type: ignore
 
-    def unsubscribe[T: Event](
-        self, event_type: type[T], subscriber: Subscriber[T]
-    ) -> None:
+    def unsubscribe(self, event_type: type[T], subscriber: Subscriber[T]) -> None:
         """Unsubscribe from an event type."""
         for sub in self.__subscribers[event_type].copy():
             if sub.handler != subscriber.handler:
@@ -48,7 +46,7 @@ class Dispatcher:
                 continue
             self.__subscribers[event_type].remove(sub)
 
-    def on[T: Event](
+    def on(
         self,
         event: type[T],
         filter: Filter[T] | None = None,  # noqa: W0622 # pylint: disable=W0622
@@ -95,9 +93,7 @@ class Dispatcher:
         i = 0
         while i < len(subscribers):
             subscriber = subscribers[i]
-            if subscriber.filters is not None and not subscriber.filters(
-                event
-            ):
+            if subscriber.filters is not None and not subscriber.filters(event):
                 continue
 
             action = subscriber.handler(event)

@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, Final, final
+from typing import TYPE_CHECKING, Any, Callable, Final, Generic, TypeVar, final
 
 from snakia.property.priv_property import PrivProperty
 from snakia.utils import inherit
 
+T = TypeVar("T")
+R = TypeVar("R")
 
-class Field[T: Any](ABC, PrivProperty[T]):
+
+class Field(ABC, PrivProperty[T], Generic[T]):
     def __init__(self, default_value: T) -> None:
         self.default_value: Final[T] = default_value
         super().__init__(default_value)
@@ -34,23 +37,19 @@ class Field[T: Any](ABC, PrivProperty[T]):
 
     @final
     @classmethod
-    def custom[R](
+    def custom(
         cls: type[Field[Any]],
         serialize: Callable[[Field[R], R], bytes],
         deserialize: Callable[[Field[R], bytes], R],
     ) -> type[Field[R]]:
-        return inherit(
-            cls, {"serialize": serialize, "deserialize": deserialize}
-        )
+        return inherit(cls, {"serialize": serialize, "deserialize": deserialize})
 
     @final
     @staticmethod
     def get_fields(class_: type[Any] | Any, /) -> dict[str, Field[Any]]:
         if not isinstance(class_, type):
             class_ = class_.__class__
-        return {
-            k: v for k, v in class_.__dict__.items() if isinstance(v, Field)
-        }
+        return {k: v for k, v in class_.__dict__.items() if isinstance(v, Field)}
 
     if TYPE_CHECKING:
 

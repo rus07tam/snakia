@@ -1,9 +1,9 @@
-from typing import Any
+from typing import Any, TypeVar
+
+T = TypeVar("T", bound=type)
 
 
-def inherit[T: type](
-    type_: T, attrs: dict[str, Any] | None = None, /, **kwargs: Any
-) -> T:
+def inherit(type_: T, attrs: dict[str, Any] | None = None, /, **kwargs: Any) -> T:
     """
     Create a new class that inherits from the given class.
 

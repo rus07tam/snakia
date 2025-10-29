@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from collections.abc import Iterable
 from itertools import count
-from typing import Any, cast, overload
+from typing import Any, TypeVar, cast, overload
 
 import networkx as nx  # type: ignore
 
@@ -11,6 +11,14 @@ from snakia.utils import nolock
 
 from .component import Component
 from .processor import Processor
+
+A = TypeVar("A", bound=Component)
+B = TypeVar("B", bound=Component)
+C = TypeVar("C", bound=Component)
+D = TypeVar("D", bound=Component)
+E = TypeVar("E", bound=Component)
+
+P = TypeVar("P", bound=Processor)
 
 
 class System:
@@ -46,9 +54,7 @@ class System:
         self.__entity_counter = count(start=1)
         self.__dead_entities = set()
 
-    def get_processor[P: Processor](
-        self, processor_type: type[P], /
-    ) -> P | None:
+    def get_processor(self, processor_type: type[P], /) -> P | None:
         """Returns the first processor of the given type."""
         for processor in self.__processors:
             if isinstance(processor, processor_type):
@@ -67,39 +73,31 @@ class System:
                 self.__processors.remove(processor)
 
     @overload
-    def get_components[A: Component](
-        self, __c1: type[A], /
-    ) -> Iterable[tuple[int, tuple[A]]]: ...
+    def get_components(self, c1: type[A], /) -> Iterable[tuple[int, tuple[A]]]: ...
 
     @overload
-    def get_components[A: Component, B: Component](
-        self, __c1: type[A], __c2: type[B], /
+    def get_components(
+        self, c1: type[A], c2: type[B], /
     ) -> Iterable[tuple[int, tuple[A, B]]]: ...
 
     @overload
-    def get_components[A: Component, B: Component, C: Component](
-        self, __c1: type[A], __c2: type[B], __c3: type[C], /
+    def get_components(
+        self, c1: type[A], c2: type[B], c3: type[C], /
     ) -> Iterable[tuple[int, tuple[A, B, C]]]: ...
 
     @overload
-    def get_components[A: Component, B: Component, C: Component, D: Component](
-        self, __c1: type[A], __c2: type[B], __c3: type[C], __c4: type[D], /
+    def get_components(
+        self, c1: type[A], c2: type[B], c3: type[C], c4: type[D], /
     ) -> Iterable[tuple[int, tuple[A, B, C, D]]]: ...
 
     @overload
-    def get_components[
-        A: Component,
-        B: Component,
-        C: Component,
-        D: Component,
-        E: Component,
-    ](
+    def get_components(
         self,
-        __c1: type[A],
-        __c2: type[B],
-        __c3: type[C],
-        __c4: type[D],
-        __c5: type[E],
+        c1: type[A],
+        c2: type[B],
+        c3: type[C],
+        c4: type[D],
+        c5: type[E],
         /,
     ) -> Iterable[tuple[int, tuple[A, B, C, D]]]: ...
 
@@ -108,10 +106,7 @@ class System:
     ) -> Iterable[tuple[int, tuple[Component, ...]]]:
         """Returns all entities with the given components."""
         entity_set = set.intersection(
-            *(
-                self.__components[component_type]
-                for component_type in component_types
-            )
+            *(self.__components[component_type] for component_type in component_types)
         )
         for entity in entity_set:
             yield (
@@ -123,51 +118,40 @@ class System:
             )
 
     @overload
-    def get_components_of_entity[A: Component](
-        self, entity: int, __c1: type[A], /
+    def get_components_of_entity(
+        self, entity: int, c1: type[A], /
     ) -> tuple[A | None]: ...
 
     @overload
-    def get_components_of_entity[A: Component, B: Component](
-        self, entity: int, __c1: type[A], __c2: type[B], /
+    def get_components_of_entity(
+        self, entity: int, c1: type[A], c2: type[B], /
     ) -> tuple[A | None, B | None]: ...
 
     @overload
-    def get_components_of_entity[A: Component, B: Component, C: Component](
-        self, entity: int, __c1: type[A], __c2: type[B], __c3: type[C], /
+    def get_components_of_entity(
+        self, entity: int, c1: type[A], c2: type[B], c3: type[C], /
     ) -> tuple[A | None, B | None, C | None]: ...
 
     @overload
-    def get_components_of_entity[
-        A: Component,
-        B: Component,
-        C: Component,
-        D: Component,
-    ](
+    def get_components_of_entity(
         self,
         entity: int,
-        __c1: type[A],
-        __c2: type[B],
-        __c3: type[C],
-        __c4: type[D],
+        c1: type[A],
+        c2: type[B],
+        c3: type[C],
+        c4: type[D],
         /,
     ) -> tuple[A | None, B | None, C | None, D | None]: ...
 
     @overload
-    def get_components_of_entity[
-        A: Component,
-        B: Component,
-        C: Component,
-        D: Component,
-        E: Component,
-    ](
+    def get_components_of_entity(
         self,
         entity: int,
-        __c1: type[A],
-        __c2: type[B],
-        __c3: type[C],
-        __c4: type[D],
-        __c5: type[E],
+        c1: type[A],
+        c2: type[B],
+        c3: type[C],
+        c4: type[D],
+        c5: type[E],
         /,
     ) -> tuple[A | None, B | None, C | None, D | None, E | None]: ...
 
@@ -183,20 +167,18 @@ class System:
             ),
         )
 
-    def get_component[C: Component](
-        self, component_type: type[C], /
-    ) -> Iterable[tuple[int, C]]:
+    def get_component(self, component_type: type[C], /) -> Iterable[tuple[int, C]]:
         """Returns all entities with the given component."""
         for entity in self.__components[component_type].copy():
             yield entity, cast(C, self.__entitites[entity][component_type])
 
     @overload
-    def get_component_of_entity[C: Component](
+    def get_component_of_entity(
         self, entity: int, component_type: type[C], /
     ) -> C | None: ...
 
     @overload
-    def get_component_of_entity[C: Component, D: Any](
+    def get_component_of_entity(
         self, entity: int, component_type: type[C], /, default: D
     ) -> C | D: ...
 
@@ -216,24 +198,16 @@ class System:
         self.__components[component_type].add(entity)
         self.__entitites[entity][component_type] = component
 
-    def has_component(
-        self, entity: int, component_type: type[Component]
-    ) -> bool:
+    def has_component(self, entity: int, component_type: type[Component]) -> bool:
         """Returns True if the entity has the given component."""
         return component_type in self.__entitites[entity]
 
-    def has_components(
-        self, entity: int, *component_types: type[Component]
-    ) -> bool:
+    def has_components(self, entity: int, *component_types: type[Component]) -> bool:
         """Returns True if the entity has all the given components."""
         components_dict = self.__entitites[entity]
-        return all(
-            comp_type in components_dict for comp_type in component_types
-        )
+        return all(comp_type in components_dict for comp_type in component_types)
 
-    def remove_component[C: Component](
-        self, entity: int, component_type: type[C]
-    ) -> C | None:
+    def remove_component(self, entity: int, component_type: type[C]) -> C | None:
         """Removes a component from an entity."""
         self.__components[component_type].discard(entity)
         if not self.__components[component_type]:
@@ -265,9 +239,7 @@ class System:
 
     def entity_exists(self, entity: int) -> bool:
         """Returns True if the entity exists."""
-        return (
-            entity in self.__entitites and entity not in self.__dead_entities
-        )
+        return entity in self.__entitites and entity not in self.__dead_entities
 
     def start(self) -> None:
         """Starts the system."""

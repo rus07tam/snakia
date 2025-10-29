@@ -1,10 +1,12 @@
 import sys
 from types import FunctionType
-from typing import Any, Callable, cast
+from typing import Any, Callable, TypeVar, cast
+
+T = TypeVar("T", bound=Callable[..., Any])
 
 if sys.version_info >= (3, 13):
 
-    def inject_const[T: Callable[..., Any]](**consts: Any) -> Callable[[T], T]:
+    def inject_const(**consts: Any) -> Callable[[T], T]:
         def inner(func: T) -> T:
             values = [*func.__code__.co_consts]
             for i, name in enumerate(func.__code__.co_varnames):
@@ -26,7 +28,7 @@ if sys.version_info >= (3, 13):
 
 else:
 
-    def inject_const[T: Callable[..., Any]](**consts: Any) -> Callable[[T], T]:
+    def inject_const(**consts: Any) -> Callable[[T], T]:
         def inner(func: T) -> T:
             values = [*func.__code__.co_consts]
             for i, name in enumerate(func.__code__.co_varnames):

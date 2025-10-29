@@ -1,11 +1,13 @@
-from typing import Any, Callable
+from typing import Any, Callable, ParamSpec, TypeVar
 
 from .inject_replace import inject_replace
 
+P = ParamSpec("P")
+T = TypeVar("T")
+R = TypeVar("R")
 
-def inject_before[T: object, **P, R](
-    obj: T, target: Callable[P, R], hook: Callable[P, Any]
-) -> T:
+
+def inject_before(obj: T, target: Callable[P, R], hook: Callable[P, Any]) -> T:
     def inner(*args: P.args, **kwargs: P.kwargs) -> R:
         hook(*args, **kwargs)
         return target(*args, **kwargs)
@@ -13,7 +15,7 @@ def inject_before[T: object, **P, R](
     return inject_replace(obj, target, inner)
 
 
-def before_hook[**P, R](
+def before_hook(
     obj: object, target: Callable[P, R]
 ) -> Callable[[Callable[P, Any]], Callable[P, Any]]:
 
