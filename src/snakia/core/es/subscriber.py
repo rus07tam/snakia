@@ -1,16 +1,18 @@
 from __future__ import annotations
 
-from typing import NamedTuple
+from typing import Generic, NamedTuple, TypeVar
 
 from .event import Event
 from .filter import Filter
 from .handler import Handler
 
+T_contra = TypeVar("T_contra", bound=Event, contravariant=True)
 
-class Subscriber[T: Event](NamedTuple):
+
+class Subscriber(NamedTuple, Generic[T_contra]):
     """
     Subscriber for an event."""
 
-    handler: Handler[T]
-    filters: Filter[T] | None
+    handler: Handler[T_contra]
+    filters: Filter[T_contra] | None
     priority: int

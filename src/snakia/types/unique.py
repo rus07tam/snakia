@@ -1,4 +1,6 @@
-from typing import Any, final
+from typing import Any, TypeVar, final
+
+T = TypeVar("T")
 
 
 @final
@@ -31,7 +33,7 @@ class UniqueType(type):
     def __eq__(cls, other: Any) -> bool:
         return cls is other
 
-    def __call__[T](cls: type[T]) -> T:
+    def __call__(cls: type[T]) -> T:
         return cls.__new__(cls)  # noqa: E1120 # pylint: disable=E1120
 
 

@@ -1,11 +1,17 @@
-from typing import Any, Callable, Self
+from __future__ import annotations
+
+from typing import Any, Callable, Generic, TypeVar
+
+from typing_extensions import Self
 
 from snakia.types import empty
 
 from .priv_property import PrivProperty
 
+T = TypeVar("T")
 
-class HookProperty[T](PrivProperty[T]):
+
+class HookProperty(PrivProperty[T], Generic[T]):
     """
     A property that calls a function when the property is set, get, or deleted.
     """

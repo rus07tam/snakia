@@ -1,14 +1,17 @@
 from __future__ import annotations
 
-from typing import Any, Callable, overload
+from typing import Any, Callable, ParamSpec, TypeVar, overload
+
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
 @overload
-def pass_exceptions[**P](
+def pass_exceptions(
     *errors: type[Exception],
 ) -> Callable[[Callable[P, Any | None]], Callable[P, Any | None]]: ...
 @overload
-def pass_exceptions[**P, R](
+def pass_exceptions(
     *errors: type[Exception],
     default: R,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]: ...

@@ -8,9 +8,7 @@ from .container import ContainerWidget
 
 
 class VerticalSplitWidget(ContainerWidget):
-    def __init__(
-        self, children: Iterable[Widget], splitter_char: str = "-"
-    ) -> None:
+    def __init__(self, children: Iterable[Widget], splitter_char: str = "-") -> None:
         super().__init__(children)
         self.splitter_char = splitter_char
 
@@ -22,9 +20,7 @@ class VerticalSplitWidget(ContainerWidget):
         child_canvases = [child.render() for child in children_list]
         max_width = max(canvas.width for canvas in child_canvases)
         total_height = (
-            sum(canvas.height for canvas in child_canvases)
-            + len(child_canvases)
-            - 1
+            sum(canvas.height for canvas in child_canvases) + len(child_canvases) - 1
         )
 
         result = Canvas(max_width, total_height, CanvasChar())

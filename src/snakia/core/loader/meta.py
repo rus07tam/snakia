@@ -23,16 +23,12 @@ class Meta(BaseModel):
         max_length=32,
         pattern="^[a-z0-9_]{4,32}$",
     )
-    version: Version = Field(
-        default_factory=lambda: Version(major=1, minor=0, patch=0)
-    )
+    version: Version = Field(default_factory=lambda: Version(major=1, minor=0, patch=0))
 
     subscribers: tuple[tuple[type[Event], Subscriber[Event]], ...] = Field(
         default_factory=tuple
     )
-    processors: tuple[type[PluginProcessor], ...] = Field(
-        default_factory=tuple
-    )
+    processors: tuple[type[PluginProcessor], ...] = Field(default_factory=tuple)
 
     @property
     def id(self) -> str:

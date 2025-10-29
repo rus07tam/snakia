@@ -1,16 +1,19 @@
-from typing import Any, NamedTuple, Protocol
+from typing import Generic, NamedTuple, Protocol, TypeVar
+
+T = TypeVar("T")
+R_co = TypeVar("R_co", covariant=True)
 
 
-class ValueChanged[T](NamedTuple):
+class ValueChanged(NamedTuple, Generic[T]):
     old_value: T
     new_value: T
 
 
-class BindableSubscriber[T: Any, R: Any](Protocol):
-    def __call__(self, value: ValueChanged[T], /) -> R: ...
+class BindableSubscriber(Protocol, Generic[T, R_co]):
+    def __call__(self, value: ValueChanged[T], /) -> R_co: ...
 
 
-class BaseBindable[T: Any]:
+class BaseBindable(Generic[T]):
     def __init__(self, default_value: T | None = None) -> None:
         if default_value is not None:
             self.__default_value: T = default_value

@@ -1,9 +1,15 @@
-from typing import Any, Callable, Self
+from __future__ import annotations
+
+from typing import Any, Callable, Generic, TypeVar
+
+from typing_extensions import Self
 
 from snakia.types import empty
 
+T = TypeVar("T")
 
-class ClassProperty[T]:
+
+class ClassProperty(Generic[T]):
     """
     Class property
     """
@@ -47,7 +53,7 @@ class ClassProperty[T]:
         return self
 
 
-def classproperty[T](
+def classproperty(
     fget: Callable[[Any], T],
     fset: Callable[[Any, T], None] = empty.func,
     fdel: Callable[[Any], None] = empty.func,
@@ -59,6 +65,6 @@ def classproperty[T](
         fset (Callable[[Any, T], None], optional): The setter function. Defaults to empty.func.
         fdel (Callable[[Any], None], optional): The deleter function. Defaults to empty.func.
     Returns:
-        ClassProperty[T]: The class property.
+        Self: The class property.
     """
     return ClassProperty(fget, fset, fdel)

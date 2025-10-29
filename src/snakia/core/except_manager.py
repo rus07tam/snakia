@@ -1,11 +1,15 @@
 import sys
 from types import TracebackType
-from typing import Any, Callable, Protocol, final
+from typing import Any, Callable, Generic, Protocol, TypeVar, final
+
+T = TypeVar("T", bound=BaseException)
+T_contra = TypeVar("T_contra", contravariant=True)
 
 
-class ExceptionHook[T: BaseException](Protocol):
+class ExceptionHook(Protocol, Generic[T_contra]):
+
     def __call__(
-        self, exception: T, frame: TracebackType | None, /
+        self, exception: T_contra, frame: TracebackType | None, /
     ) -> bool | None: ...
 
 
@@ -15,13 +19,13 @@ class _ExceptionManager:
         self.__hooks: list[tuple[type[BaseException], ExceptionHook[Any]]] = []
         sys.excepthook = self._excepthook
 
-    def hook_exception[T: BaseException](
+    def hook_exception(
         self, exception_type: type[T], func: ExceptionHook[T]
     ) -> ExceptionHook[T]:
         self.__hooks.append((exception_type, func))
         return func
 
-    def on_exception[T: BaseException](
+    def on_exception(
         self, exception_type: type[T]
     ) -> Callable[[ExceptionHook[T]], ExceptionHook[T]]:
         def inner(func: ExceptionHook[T]) -> ExceptionHook[T]:

@@ -40,9 +40,7 @@ class Canvas:
 
     def get_column(self, x: int, /) -> Iterable[CanvasChar]:
         """Get the column at the given position."""
-        return (
-            self.__buffer[self._get_index(x, y)] for y in range(self.height)
-        )
+        return (self.__buffer[self._get_index(x, y)] for y in range(self.height))
 
     def set(self, x: int, y: int, value: CanvasChar, /) -> None:
         """Set the character at the given position."""
@@ -68,9 +66,7 @@ class Canvas:
         value: CanvasChar,
     ) -> None:
         """Set the area at the given position."""
-        for i in range(
-            self._get_index(x, y), self._get_index(x + width, y + height)
-        ):
+        for i in range(self._get_index(x, y), self._get_index(x + width, y + height)):
             self.__buffer[i] = value
 
     def clear(self) -> None:

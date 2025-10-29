@@ -1,5 +1,7 @@
-from typing import Callable
+from typing import Callable, TypeVar
+
+T = TypeVar("T")
 
 
-def const[T](value: T) -> Callable[[], T]:
+def const(value: T) -> Callable[[], T]:
     return lambda: value

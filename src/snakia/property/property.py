@@ -1,9 +1,13 @@
-from typing import Any, Callable, Self
+from __future__ import annotations
+
+from typing import Any, Callable, Generic, TypeVar
 
 from snakia.types import empty
 
+T = TypeVar("T")
 
-class Property[T]:
+
+class Property(Generic[T]):
     """
     A property that can be set, get, and deleted.
     """
@@ -34,17 +38,17 @@ class Property[T]:
     def __delete__(self, instance: Any, /) -> None:
         return self.__fdel(instance)
 
-    def getter(self, fget: Callable[[Any], T], /) -> Self:
+    def getter(self, fget: Callable[[Any], T], /) -> Property[T]:
         """Descriptor getter."""
         self.__fget = fget
         return self
 
-    def setter(self, fset: Callable[[Any, T], None], /) -> Self:
+    def setter(self, fset: Callable[[Any, T], None], /) -> Property[T]:
         """Descriptor setter."""
         self.__fset = fset
         return self
 
-    def deleter(self, fdel: Callable[[Any], None], /) -> Self:
+    def deleter(self, fdel: Callable[[Any], None], /) -> Property[T]:
         """Descriptor deleter."""
         self.__fdel = fdel
         return self

@@ -1,8 +1,12 @@
+from typing import TypeVar
+
 from .async_bindable import AsyncBindable
 from .bindable import Bindable
 
+T = TypeVar("T")
 
-def merge[T](
+
+def merge(
     *sources: Bindable[T],
 ) -> Bindable[T]:
     merged = Bindable[T]()
@@ -11,7 +15,7 @@ def merge[T](
     return merged
 
 
-async def async_merge[T](
+async def async_merge(
     *sources: AsyncBindable[T],
 ) -> AsyncBindable[T]:
     merged = AsyncBindable[T]()

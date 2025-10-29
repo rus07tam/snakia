@@ -15,9 +15,7 @@ class Engine:
         self.__dispatcher_thread: threading.Thread | None = None
 
     def start(self) -> None:
-        self.__system_thread = threading.Thread(
-            target=self.system.start, daemon=False
-        )
+        self.__system_thread = threading.Thread(target=self.system.start, daemon=False)
         self.__dispatcher_thread = threading.Thread(
             target=self.dispatcher.start, daemon=False
         )

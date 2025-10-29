@@ -1,5 +1,5 @@
 import operator
-from typing import Any, Callable, overload
+from typing import Any, Callable, TypeVar, overload
 
 from snakia.utils import to_async
 
@@ -8,9 +8,16 @@ from .base_bindable import ValueChanged
 from .bindable import Bindable
 from .concat import concat
 
+A = TypeVar("A")
+B = TypeVar("B")
+C = TypeVar("C")
+D = TypeVar("D")
+E = TypeVar("E")
+R = TypeVar("R")
+
 
 @overload
-def combine[A, R](
+def combine(
     source1: Bindable[A] | AsyncBindable[A],
     /,
     *,
@@ -19,7 +26,7 @@ def combine[A, R](
 
 
 @overload
-def combine[A, B, R](
+def combine(
     source1: Bindable[A] | AsyncBindable[A],
     source2: Bindable[B] | AsyncBindable[B],
     /,
@@ -29,7 +36,7 @@ def combine[A, B, R](
 
 
 @overload
-def combine[A, B, C, R](
+def combine(
     source1: Bindable[A] | AsyncBindable[A],
     source2: Bindable[B] | AsyncBindable[B],
     source3: Bindable[C] | AsyncBindable[C],
@@ -40,7 +47,7 @@ def combine[A, B, C, R](
 
 
 @overload
-def combine[A, B, C, D, R](
+def combine(
     source1: Bindable[A] | AsyncBindable[A],
     source2: Bindable[B] | AsyncBindable[B],
     source3: Bindable[C] | AsyncBindable[C],
@@ -52,7 +59,7 @@ def combine[A, B, C, D, R](
 
 
 @overload
-def combine[A, B, C, D, R](
+def combine(
     source1: Bindable[A] | AsyncBindable[A],
     source2: Bindable[B] | AsyncBindable[B],
     source3: Bindable[C] | AsyncBindable[C],
@@ -64,13 +71,13 @@ def combine[A, B, C, D, R](
 
 
 @overload
-def combine[R](
+def combine(
     *sources: Bindable[Any] | AsyncBindable[Any],
     combiner: Callable[..., R],
 ) -> Bindable[R]: ...
 
 
-def combine[R](
+def combine(
     *sources: Bindable[Any] | AsyncBindable[Any],
     combiner: Callable[..., R],
 ) -> Bindable[R]:

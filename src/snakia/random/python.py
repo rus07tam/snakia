@@ -1,8 +1,9 @@
 import random
+from typing import TypeAlias
 
 from .random import Random
 
-type _State = tuple[int, tuple[int, ...], int | float | None]
+_State: TypeAlias = tuple[int, tuple[int, ...], int | float | None]
 
 
 class PythonRandom(Random[_State]):

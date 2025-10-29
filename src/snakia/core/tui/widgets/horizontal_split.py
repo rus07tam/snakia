@@ -8,9 +8,7 @@ from .container import ContainerWidget
 
 
 class HorizontalSplitWidget(ContainerWidget):
-    def __init__(
-        self, children: Iterable[Widget], splitter_char: str = "|"
-    ) -> None:
+    def __init__(self, children: Iterable[Widget], splitter_char: str = "|") -> None:
         super().__init__(children)
         self.splitter_char = splitter_char
 
@@ -21,9 +19,7 @@ class HorizontalSplitWidget(ContainerWidget):
 
         child_canvases = [child.render() for child in children_list]
         total_width = (
-            sum(canvas.width for canvas in child_canvases)
-            + len(child_canvases)
-            - 1
+            sum(canvas.width for canvas in child_canvases) + len(child_canvases) - 1
         )
         max_height = max(canvas.height for canvas in child_canvases)
 

@@ -1,14 +1,29 @@
-from typing import Any, Callable, Self
+from __future__ import annotations
+
+from typing import Any, Generic, Protocol, TypeAlias, TypeVar
+
+from typing_extensions import Self
 
 from snakia.types import empty
 
-type _Cell[T] = T | None
-type _Getter[T] = Callable[[Any, _Cell[T]], T]
-type _Setter[T] = Callable[[Any, _Cell[T], T], _Cell[T]]
-type _Deleter[T] = Callable[[Any, _Cell[T]], _Cell[T]]
+T = TypeVar("T")
+
+_Cell: TypeAlias = T | None
 
 
-class CellProperty[T]:
+class _Getter(Protocol, Generic[T]):
+    def __call__(self, instance: Any, cell: _Cell[T], /) -> T: ...
+
+
+class _Setter(Protocol, Generic[T]):
+    def __call__(self, instance: Any, cell: _Cell[T], value: T, /) -> _Cell[T]: ...
+
+
+class _Deleter(Protocol, Generic[T]):
+    def __call__(self, instance: Any, cell: _Cell[T], /) -> _Cell[T]: ...
+
+
+class CellProperty(Generic[T]):
     """
     A property that uses a cell to store its value.
     """
