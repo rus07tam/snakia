@@ -26,6 +26,15 @@ class System:
     A system is a collection of entities and components that can be processed by processors.
     """
 
+    __slots__ = (
+        "__processors",
+        "__components",
+        "__entitites",
+        "__entity_counter",
+        "__dead_entities",
+        "__is_running",
+    )
+
     __processors: list[Processor]
     __components: dict[type[Component], set[int]]
     __entitites: dict[int, dict[type[Component], Component]]
@@ -73,7 +82,9 @@ class System:
                 self.__processors.remove(processor)
 
     @overload
-    def get_components(self, c1: type[A], /) -> Iterable[tuple[int, tuple[A]]]: ...
+    def get_components(
+        self, c1: type[A], /
+    ) -> Iterable[tuple[int, tuple[A]]]: ...
 
     @overload
     def get_components(
@@ -106,7 +117,10 @@ class System:
     ) -> Iterable[tuple[int, tuple[Component, ...]]]:
         """Returns all entities with the given components."""
         entity_set = set.intersection(
-            *(self.__components[component_type] for component_type in component_types)
+            *(
+                self.__components[component_type]
+                for component_type in component_types
+            )
         )
         for entity in entity_set:
             yield (
@@ -167,7 +181,9 @@ class System:
             ),
         )
 
-    def get_component(self, component_type: type[C], /) -> Iterable[tuple[int, C]]:
+    def get_component(
+        self, component_type: type[C], /
+    ) -> Iterable[tuple[int, C]]:
         """Returns all entities with the given component."""
         for entity in self.__components[component_type].copy():
             yield entity, cast(C, self.__entitites[entity][component_type])
@@ -198,16 +214,24 @@ class System:
         self.__components[component_type].add(entity)
         self.__entitites[entity][component_type] = component
 
-    def has_component(self, entity: int, component_type: type[Component]) -> bool:
+    def has_component(
+        self, entity: int, component_type: type[Component]
+    ) -> bool:
         """Returns True if the entity has the given component."""
         return component_type in self.__entitites[entity]
 
-    def has_components(self, entity: int, *component_types: type[Component]) -> bool:
+    def has_components(
+        self, entity: int, *component_types: type[Component]
+    ) -> bool:
         """Returns True if the entity has all the given components."""
         components_dict = self.__entitites[entity]
-        return all(comp_type in components_dict for comp_type in component_types)
+        return all(
+            comp_type in components_dict for comp_type in component_types
+        )
 
-    def remove_component(self, entity: int, component_type: type[C]) -> C | None:
+    def remove_component(
+        self, entity: int, component_type: type[C]
+    ) -> C | None:
         """Removes a component from an entity."""
         self.__components[component_type].discard(entity)
         if not self.__components[component_type]:
@@ -239,7 +263,9 @@ class System:
 
     def entity_exists(self, entity: int) -> bool:
         """Returns True if the entity exists."""
-        return entity in self.__entitites and entity not in self.__dead_entities
+        return (
+            entity in self.__entitites and entity not in self.__dead_entities
+        )
 
     def start(self) -> None:
         """Starts the system."""

@@ -19,25 +19,29 @@ class Dispatcher:
     Event dispatcher
     """
 
-    __running: bool
+    __slots__ = ("__queue", "__subscribers", "__running")
 
     def __init__(self) -> None:
         self.__queue: Final = queue.Queue[Event]()
-        self.__subscribers: Final[dict[type[Event], list[Subscriber[Event]]]] = (
-            defaultdict(list)
-        )
-        self.__running = False
+        self.__subscribers: Final[
+            dict[type[Event], list[Subscriber[Event]]]
+        ] = defaultdict(list)
+        self.__running: bool = False
 
     @property
     def is_running(self) -> bool:
         """Returns True if the dispatcher is running."""
         return self.__running
 
-    def subscribe(self, event_type: type[T], subscriber: Subscriber[T]) -> None:
+    def subscribe(
+        self, event_type: type[T], subscriber: Subscriber[T]
+    ) -> None:
         """Subscribe to an event type."""
         self.__subscribers[event_type].append(subscriber)  # type: ignore
 
-    def unsubscribe(self, event_type: type[T], subscriber: Subscriber[T]) -> None:
+    def unsubscribe(
+        self, event_type: type[T], subscriber: Subscriber[T]
+    ) -> None:
         """Unsubscribe from an event type."""
         for sub in self.__subscribers[event_type].copy():
             if sub.handler != subscriber.handler:
@@ -93,7 +97,9 @@ class Dispatcher:
         i = 0
         while i < len(subscribers):
             subscriber = subscribers[i]
-            if subscriber.filters is not None and not subscriber.filters(event):
+            if subscriber.filters is not None and not subscriber.filters(
+                event
+            ):
                 continue
 
             action = subscriber.handler(event)

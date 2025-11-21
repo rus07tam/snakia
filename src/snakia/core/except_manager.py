@@ -15,6 +15,8 @@ class ExceptionHook(Protocol, Generic[T_contra]):
 
 @final
 class _ExceptionManager:
+    __slots__ = ("__hooks", "excepthook")
+
     def __init__(self) -> None:
         self.__hooks: list[tuple[type[BaseException], ExceptionHook[Any]]] = []
         sys.excepthook = self._excepthook

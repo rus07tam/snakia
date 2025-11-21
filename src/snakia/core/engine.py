@@ -7,6 +7,14 @@ from .loader.loader import Loader
 
 
 class Engine:
+    __slots__ = (
+        "system",
+        "dispatcher",
+        "loader",
+        "__system_thread",
+        "__dispatcher_thread",
+    )
+
     def __init__(self) -> None:
         self.system: Final = System()
         self.dispatcher: Final = Dispatcher()
@@ -15,7 +23,9 @@ class Engine:
         self.__dispatcher_thread: threading.Thread | None = None
 
     def start(self) -> None:
-        self.__system_thread = threading.Thread(target=self.system.start, daemon=False)
+        self.__system_thread = threading.Thread(
+            target=self.system.start, daemon=False
+        )
         self.__dispatcher_thread = threading.Thread(
             target=self.dispatcher.start, daemon=False
         )
