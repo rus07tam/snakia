@@ -1,14 +1,14 @@
 from .async_bindable import AsyncBindable
 from .base_bindable import BaseBindable, BindableSubscriber, ValueChanged
 from .bindable import Bindable
-from .chain import chain
-from .combine import combine
-from .concat import concat
-from .cond import cond
-from .const import const
-from .filter import filter  # noqa: W0622 # pylint: disable=W0622
-from .map import map  # noqa: W0622 # pylint: disable=W0622
-from .merge import async_merge, merge
+from .chains import chain
+from .combines import combine
+from .concats import concat
+from .conds import cond
+from .consts import const
+from .filters import filter  # noqa: W0622 # pylint: disable=W0622
+from .maps import map  # noqa: W0622 # pylint: disable=W0622
+from .merges import async_merge, merge
 
 __all__ = [
     "Bindable",
