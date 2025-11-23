@@ -46,7 +46,7 @@ class UniqueType(type):
 
     def unwrap(cls: type[T], value: V | type[T] | T, /) -> V:
         if value is cls or isinstance(value, cls):
-            raise TypeError(f"Expected {cls}, got {value}")
+            raise TypeError(f"{cls} not unwrapped")
         return value  # type: ignore
 
     def map(
@@ -56,8 +56,8 @@ class UniqueType(type):
         or_else: Callable[[type[T]], R],
     ) -> R:
         if value is cls or isinstance(value, cls):
-            return and_then(value)  # type: ignore
-        return or_else(cls)
+            return or_else(cls)
+        return and_then(value)  # type: ignore
 
     def and_then(
         cls: type[T], value: V | type[T] | T, func: Callable[[V], R]
