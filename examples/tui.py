@@ -2,8 +2,12 @@ import sys
 
 from snakia.core.tui import CanvasChar, RenderContext
 from snakia.core.tui.render import ANSIRenderer
-from snakia.core.tui.widgets import (BoxWidget, HorizontalSplitWidget,
-                                     TextWidget, VerticalSplitWidget)
+from snakia.core.tui.widgets import (
+    BoxWidget,
+    HorizontalSplitWidget,
+    TextWidget,
+    VerticalSplitWidget,
+)
 
 
 class StdoutTarget:
