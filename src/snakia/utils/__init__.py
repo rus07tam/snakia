@@ -1,13 +1,16 @@
-from .attr import get_attrs, get_or_set_attr
-from .frame import frame
+from .attrs import get_attrs, get_or_set_attr
+from .calls import call, caller
+from .exceptions import catch, throw
+from .frames import frame
 from .inherit import inherit
 from .nolock import nolock
 from .side import side, side_func
 from .this import this
-from .throw import throw
 from .to_async import to_async
 
 __all__ = [
+    "call",
+    "caller",
     "get_or_set_attr",
     "get_attrs",
     "frame",
@@ -17,5 +20,6 @@ __all__ = [
     "side_func",
     "this",
     "throw",
+    "catch",
     "to_async",
 ]
