@@ -1,4 +1,6 @@
-from typing import Generic, NamedTuple, Protocol, TypeVar
+from typing import Generic, Protocol, TypeVar
+
+from typing_extensions import NamedTuple
 
 T = TypeVar("T")
 R_co = TypeVar("R_co", covariant=True)

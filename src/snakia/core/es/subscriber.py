@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import Generic, NamedTuple, TypeVar
+from typing import Generic, TypeVar
+
+from typing_extensions import NamedTuple
 
 from .event import Event
 from .filter import Filter
