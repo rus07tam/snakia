@@ -1,6 +1,6 @@
 [project]
 name = "snakia"
-version = "0.4.2"
+version = "0.5.0"
 description = "Modern python framework"
 readme = "README.md"
 authors = [
