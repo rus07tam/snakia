@@ -1,6 +1,8 @@
-from typing import Any, TypeVar, final
+from typing import Any, Callable, TypeGuard, TypeVar, final
 
 T = TypeVar("T")
+V = TypeVar("V")
+R = TypeVar("R")
 
 
 @final
@@ -35,6 +37,41 @@ class UniqueType(type):
 
     def __call__(cls: type[T]) -> T:
         return cls.__new__(cls)  # noqa: E1120 # pylint: disable=E1120
+
+    def __hash__(cls) -> int:
+        return id(cls)
+
+    def itis(cls: type[T], value: Any) -> TypeGuard[T]:
+        return value is cls or isinstance(value, cls)
+
+    def unwrap(cls: type[T], value: V | type[T] | T, /) -> V:
+        if value is cls or isinstance(value, cls):
+            raise TypeError(f"{cls} not unwrapped")
+        return value  # type: ignore
+
+    def map(
+        cls: type[T],
+        value: V | type[T] | T,
+        and_then: Callable[[V], R],
+        or_else: Callable[[type[T]], R],
+    ) -> R:
+        if value is cls or isinstance(value, cls):
+            return or_else(cls)
+        return and_then(value)  # type: ignore
+
+    def and_then(
+        cls: type[T], value: V | type[T] | T, func: Callable[[V], R]
+    ) -> type[T] | R:
+        if value is cls or isinstance(value, cls):
+            return cls
+        return func(value)  # type: ignore
+
+    def or_else(
+        cls: type[T], value: V | type[T] | T, func: Callable[[type[T]], R]
+    ) -> R | V:
+        if value is cls or isinstance(value, cls):
+            return func(cls)
+        return value  # type: ignore
 
 
 class Unique(metaclass=UniqueType):  # noqa: R0903 # pylint: disable=R0903

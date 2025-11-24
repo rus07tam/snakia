@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 
 class Loader:
+    __slots__ = ("__engine", "__loadables")
+
     def __init__(self, engine: Engine) -> None:
         self.__engine: Final = engine
         self.__loadables: Final[list[Loadable]] = []

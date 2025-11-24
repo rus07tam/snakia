@@ -19,14 +19,14 @@ class Dispatcher:
     Event dispatcher
     """
 
-    __running: bool
+    __slots__ = ("__queue", "__subscribers", "__running")
 
     def __init__(self) -> None:
         self.__queue: Final = queue.Queue[Event]()
         self.__subscribers: Final[dict[type[Event], list[Subscriber[Event]]]] = (
             defaultdict(list)
         )
-        self.__running = False
+        self.__running: bool = False
 
     @property
     def is_running(self) -> bool:

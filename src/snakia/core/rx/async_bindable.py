@@ -23,6 +23,9 @@ class AsyncBindable(BaseBindable[T], Generic[T]):
 
     async def set(self, value: T) -> None:
         """Set the value."""
+        if not (self.has_default_value or self.has_value):
+            self.set_silent(value)
+            return
         e = ValueChanged(self.value, value)
         self.set_silent(value)
         for subscriber in self.__subscribers:

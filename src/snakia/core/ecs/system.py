@@ -5,7 +5,7 @@ from collections.abc import Iterable
 from itertools import count
 from typing import Any, TypeVar, cast, overload
 
-import networkx as nx  # type: ignore
+import networkx as nx
 
 from snakia.utils import nolock
 
@@ -25,6 +25,15 @@ class System:
     """
     A system is a collection of entities and components that can be processed by processors.
     """
+
+    __slots__ = (
+        "__processors",
+        "__components",
+        "__entitites",
+        "__entity_counter",
+        "__dead_entities",
+        "__is_running",
+    )
 
     __processors: list[Processor]
     __components: dict[type[Component], set[int]]

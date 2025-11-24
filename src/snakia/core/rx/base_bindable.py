@@ -1,4 +1,6 @@
-from typing import Generic, NamedTuple, Protocol, TypeVar
+from typing import Generic, Protocol, TypeVar
+
+from typing_extensions import NamedTuple
 
 T = TypeVar("T")
 R_co = TypeVar("R_co", covariant=True)
@@ -25,7 +27,26 @@ class BaseBindable(Generic[T]):
 
     @property
     def value(self) -> T:
-        return self.__value
+        if self.has_value:
+            return self.__value
+        else:
+            return self.default_value
+
+    @property
+    def has_value(self) -> bool:
+        try:
+            _ = self.__value
+            return True
+        except AttributeError:
+            return False
+
+    @property
+    def has_default_value(self) -> bool:
+        try:
+            _ = self.__default_value
+            return True
+        except AttributeError:
+            return False
 
     def set_silent(self, value: T) -> None:
         self.__value = value

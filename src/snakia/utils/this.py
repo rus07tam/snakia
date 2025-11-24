@@ -2,7 +2,7 @@ import gc
 from types import FunctionType, MethodType
 from typing import Any
 
-from .frame import frame
+from .frames import frame
 
 
 def this() -> Any:
