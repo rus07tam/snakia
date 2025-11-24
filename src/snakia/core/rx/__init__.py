@@ -1,7 +1,7 @@
 from .async_bindable import AsyncBindable
 from .base_bindable import BaseBindable, BindableSubscriber, ValueChanged
 from .bindable import Bindable
-from .chains import chain
+from .chains import async_chain, chain
 from .combines import async_combine, combine
 from .concats import concat
 from .conds import cond
@@ -16,6 +16,7 @@ __all__ = [
     "BaseBindable",
     "BindableSubscriber",
     "ValueChanged",
+    "async_chain",
     "async_combine",
     "async_merge",
     "chain",
