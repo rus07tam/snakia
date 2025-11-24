@@ -1,9 +1,7 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(
-    0, str((Path(__file__).parent.parent.parent / "src").resolve())
-)
+sys.path.insert(0, str((Path(__file__).parent.parent.parent / "src").resolve()))
 
 project = "Snakia"
 copyright = "2025, RuJect"

@@ -11,12 +11,8 @@ E = TypeVar("E")
 
 @overload
 def chain(func1: Callable[P, A], /) -> Callable[P, A]: ...
-
-
 @overload
-def chain(
-    func1: Callable[P, A], func2: Callable[[A], B], /
-) -> Callable[P, B]: ...
+def chain(func1: Callable[P, A], func2: Callable[[A], B], /) -> Callable[P, B]: ...
 @overload
 def chain(
     func1: Callable[P, A], func2: Callable[[A], B], func3: Callable[[B], C], /
@@ -29,8 +25,6 @@ def chain(
     func4: Callable[[C], D],
     /,
 ) -> Callable[P, D]: ...
-
-
 @overload
 def chain(
     func1: Callable[P, A],
@@ -40,17 +34,11 @@ def chain(
     func5: Callable[[D], E],
     /,
 ) -> Callable[P, E]: ...
-
-
 @overload
 def chain(
     func1: Callable[P, Any], /, *funcs: Callable[[Any], Any]
 ) -> Callable[P, Any]: ...
-
-
-def chain(
-    func1: Callable[P, Any], /, *funcs: Callable[[Any], Any]
-) -> Callable[P, Any]:
+def chain(func1: Callable[P, Any], /, *funcs: Callable[[Any], Any]) -> Callable[P, Any]:
 
     def inner(*args: P.args, **kwargs: P.kwargs) -> Any:
         v = func1(*args, **kwargs)
@@ -62,17 +50,11 @@ def chain(
 
 
 @overload
-def async_chain(
-    func1: Callable[P, Awaitable[A]], /
-) -> Callable[P, Awaitable[A]]: ...
-
-
+def async_chain(func1: Callable[P, Awaitable[A]], /) -> Callable[P, Awaitable[A]]: ...
 @overload
 def async_chain(
     func1: Callable[P, Awaitable[A]], func2: Callable[[A], Awaitable[B]], /
 ) -> Callable[P, Awaitable[B]]: ...
-
-
 @overload
 def async_chain(
     func1: Callable[P, Awaitable[A]],
@@ -80,8 +62,6 @@ def async_chain(
     func3: Callable[[B], Awaitable[C]],
     /,
 ) -> Callable[P, Awaitable[C]]: ...
-
-
 @overload
 def async_chain(
     func1: Callable[P, Awaitable[A]],
@@ -90,8 +70,6 @@ def async_chain(
     func4: Callable[[C], Awaitable[D]],
     /,
 ) -> Callable[P, Awaitable[D]]: ...
-
-
 @overload
 def async_chain(
     func1: Callable[P, Awaitable[A]],
@@ -101,14 +79,10 @@ def async_chain(
     func5: Callable[[D], Awaitable[E]],
     /,
 ) -> Callable[P, Awaitable[E]]: ...
-
-
 @overload
 def async_chain(
     func1: Callable[P, Any], /, *funcs: Callable[[Any], Awaitable[Any]]
 ) -> Callable[P, Awaitable[Any]]: ...
-
-
 def async_chain(
     func1: Callable[P, Awaitable[Any]],
     /,
