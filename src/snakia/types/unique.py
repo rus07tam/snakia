@@ -49,6 +49,11 @@ class UniqueType(type):
             raise TypeError(f"{cls} not unwrapped")
         return value  # type: ignore
 
+    def unwrap_or(cls: type[T], value: V | type[T] | T, default: R, /) -> V | R:
+        if value is cls or isinstance(value, cls):
+            return default
+        return value  # type: ignore
+
     def map(
         cls: type[T],
         value: V | type[T] | T,
