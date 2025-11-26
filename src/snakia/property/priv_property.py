@@ -1,5 +1,8 @@
 from typing import Any, Callable, Final, Generic, TypeVar, overload
+
 from typing_extensions import Self
+
+from snakia.types import Unset
 
 T = TypeVar("T")
 
@@ -17,20 +20,18 @@ class PrivProperty(Generic[T]):
     def __init__(self, *, default_factory: Callable[[Self], T]) -> None: ...
     def __init__(
         self,
-        default_value: T | None = None,
-        default_factory: Callable[[Self], T] | None = None,
+        default_value: T | Unset = Unset(),
+        default_factory: Callable[[Self], T] | Unset = Unset(),
     ) -> None:
-        self.__default_value: Final[T | None] = default_value
-        self.__default_factory: Final[Callable[[Self], T] | None] = (
-            default_factory
-        )
+        self.__default_value: Final[T | Unset] = default_value
+        self.__default_factory: Final[Callable[[Self], T] | Unset] = default_factory
 
     def _get_default(self: Self) -> T:
-        if self.__default_value is not None:
-            return self.__default_value
-        if self.__default_factory is not None:
-            return self.__default_factory(self)
-        raise ValueError("Either default_value or default_factory must be set")
+        return Unset.map(
+            self.__default_factory,
+            lambda f: f(self),
+            lambda _: Unset.unwrap(self.__default_value),
+        )
 
     def __set_name__(self, owner: type, name: str) -> None:
         self.__name = f"_{owner.__name__}__{name}"
