@@ -18,3 +18,7 @@ def side(value: T, *_: Any, **__: Any) -> T:
 
 def side_func(value: T, *_: Any, **__: Any) -> Callable[..., T]:
     return lambda *_, **__: value
+
+
+def ret() -> Callable[[T], T]:
+    return lambda x: x
