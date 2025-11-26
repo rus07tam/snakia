@@ -5,6 +5,7 @@ from .field import Field as field
 from .float import FloatField as float
 from .int import IntField as int
 from .list import ListField as list
+from .optional import OptionalField as optional
 from .str import StrField as str
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     "float",
     "int",
     "list",
+    "optional",
     "str",
 ]
